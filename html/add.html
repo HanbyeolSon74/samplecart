@@ -21,8 +21,20 @@
       <div id="pricered" class="error"></div>
 
       <!-- 상세 내용 -->
-      <input type="text" id="content" placeholder="상세내용을 입력해 주세요" />
+      <textarea
+        id="content"
+        placeholder="상세내용을 입력해 주세요"
+        rows="5"
+        cols="40"
+      ></textarea>
       <div id="contentred" class="error"></div>
+
+      <!-- 카테고리 -->
+      <div id="category-list">
+        <span class="category-dot" data-category="Glasses"></span> Glasses
+        <span class="category-dot" data-category="sunglasses"></span> Sunglasses
+      </div>
+      <div id="categoryred" class="error"></div>
 
       <button id="saveButton" disabled>저장</button>
     </div>

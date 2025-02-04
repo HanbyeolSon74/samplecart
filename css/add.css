@@ -1,181 +1,186 @@
-/* 전체 레이아웃 설정 */
+/* 전체 컨테이너 */
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Pretendard", sans-serif;
+  background: #f0f0f0;
+  color: #333;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-  color: #2c3e50;
-  line-height: 1.6;
 }
 
-.input-wrap {
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px;
-  background: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+/* 메인 래퍼 */
+.main-wrap {
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 40px;
+  background: white;
   border-radius: 12px;
-  border: 1px solid #e0e4e8;
-  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
 }
 
-.input-wrap h2 {
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: 600;
-  color: #34495e;
+/* 입력 필드 그룹 */
+.input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 60%; /* 80% 크기로 제한 */
+  margin: 0 auto; /* 중앙 정렬 */
 }
 
+/* 인풋 필드 스타일 */
 .input-wrap input {
-  display: block;
-  width: calc(100% - 30px);
-  margin: 12px auto;
-  padding: 12px 16px;
-  font-size: 14px;
-  border: 1px solid #dfe6e9;
+  padding: 10px 14px;
   border-radius: 8px;
-  background: #f9fbfd;
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  border: 1px solid #e0e0e0;
+  background: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  height: 40px; /* 높이 조정 */
 }
 
 .input-wrap input:focus {
-  border-color: #6c5ce7;
+  border-color: #000;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   outline: none;
-  box-shadow: 0 0 6px rgba(108, 92, 231, 0.3);
 }
 
-.input-wrap div {
-  color: #e74c3c;
-  font-size: 13px;
-  margin-top: -8px;
-  margin-bottom: 12px;
-  font-weight: 500;
-}
-
-button {
-  display: block;
-  width: 80%;
-  margin: 20px auto 0;
-  padding: 12px;
+/* 에러 메시지 */
+.error {
+  color: #d32f2f;
   font-size: 14px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #6c5ce7, #5f27cd);
+}
+
+/* 저장 버튼 */
+#saveButton {
+  padding: 12px 18px;
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
   border: none;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
-button:hover {
-  background: linear-gradient(135deg, #5f27cd, #341f97);
-  transform: translateY(-3px);
+#saveButton:disabled {
+  background-color: #999;
+  cursor: not-allowed;
 }
 
-/* 수정 및 삭제 버튼 나란히 배치 */
-td button {
-  display: inline-block; /* 인라인 블록으로 설정 */
-  width: 40%;
+#saveButton:hover:not(:disabled) {
+  background-color: #333;
 }
 
-td button:last-child {
-  margin-right: 0;
+#category-list {
+  display: flex;
+  gap: 20px; /* 각 항목 사이 간격 */
+  align-items: center;
 }
 
-td button:hover {
-  background: linear-gradient(135deg, #5f27cd, #341f97);
-  transform: translateY(-2px);
+.category-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.category-dot.selected {
+  background-color: black; /* 선택된 항목의 배경색 */
+}
+
+.category-dot:hover {
+  background-color: #f0f0f0;
 }
 
 /* 테이블 스타일 */
-.main-wrap {
-  max-width: 1000px;
-  margin: 60px auto;
-  overflow-x: auto;
-}
-
 table {
-  width: 100%;
+  width: 100%; /* 테이블 너비를 더 넓게 설정 */
+  margin-top: 30px;
   border-collapse: collapse;
-  background: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #e0e4e8;
-}
-
-thead {
-  background: linear-gradient(135deg, #6c5ce7, #5f27cd);
-  color: #ffffff;
-}
-
-thead th {
-  padding: 16px;
   text-align: left;
-  font-size: 14px;
+}
+
+table th,
+table td {
+  padding: 20px; /* 셀의 패딩을 늘려서 공간을 더 확보 */
+  font-size: 18px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+table th {
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #555;
 }
 
-tbody tr {
-  transition: background-color 0.2s ease;
+table td {
+  color: #333;
 }
 
-tbody tr:nth-child(odd) {
-  background-color: #f9fbfd;
+table img {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
 }
 
-tbody tr:nth-child(even) {
-  background-color: #ffffff;
-}
-
-tbody tr:hover {
-  background-color: #eef5fc;
-}
-
-td {
-  padding: 14px;
-  border-bottom: 1px solid #e0e4e8;
-  text-align: left;
+/* 수정 & 삭제 버튼 */
+button {
+  padding: 6px 12px;
   font-size: 14px;
-  color: #34495e;
+  font-weight: bold;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* 수정 버튼 스타일 */
+button.edit {
+  background-color: #2d6cc4;
+  color: white;
+}
+
+button.edit:hover {
+  background-color: #1c4a7c;
+}
+
+/* 삭제 버튼 스타일 */
+button.delete {
+  background-color: #d32f2f;
+  color: white;
+  margin-left: 10px;
+}
+
+button.delete:hover {
+  background-color: #b71c1c;
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .input-wrap {
+  .main-wrap {
     padding: 20px;
   }
 
-  .input-wrap h2 {
-    font-size: 18px;
+  .input-wrap {
+    gap: 15px;
   }
 
-  input {
-    font-size: 13px;
-    padding: 10px 14px;
-  }
-
-  button {
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  thead th {
-    font-size: 13px;
-  }
-
-  td {
-    font-size: 12px;
+  table th,
+  table td {
+    font-size: 14px;
     padding: 10px;
   }
 }

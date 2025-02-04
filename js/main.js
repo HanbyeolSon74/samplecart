@@ -1,121 +1,223 @@
-// 페이지가 로드된 후 실행
-window.onload = function () {
-  createHeader();
-  displayProducts();
-};
-
-// 헤더 생성
-function createHeader() {
-  const header = document.querySelector(".header-gm");
-
-  // 로고
-  const logo = document.createElement("div");
-  logo.classList.add("logo");
-  const logoImg = document.createElement("img");
-  logoImg.src = "/img/SleekLens.png";
-  logoImg.alt = "Logo";
-  logo.appendChild(logoImg);
-  header.appendChild(logo);
-
-  // 로그인
-  const login = document.createElement("div");
-  login.classList.add("login");
-  const loginLink = document.createElement("a");
-  loginLink.href = "#";
-  loginLink.innerText = "로그인";
-
-  // 로그인 버튼 클릭 시 알림
-  loginLink.addEventListener("click", () => {
-    alert("준비중입니다");
-  });
-
-  login.appendChild(loginLink);
-  header.appendChild(login);
-
-  // 장바구니
-  const cart = document.createElement("div");
-  cart.classList.add("cart");
-  const cartLink = document.createElement("a");
-
-  const cartImg = document.createElement("img");
-  cartImg.src = "/img/shopping_bag.png";
-  cartImg.alt = "Cart";
-  cartLink.appendChild(cartImg);
-
-  // localStorage에서 cartItems 정보 가져오기
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
-  cartLink.addEventListener("click", () => {
-    window.location.href = "/html/cart.html";
-  });
-
-  // 장바구니에 추가된 상품의 개수 표시
-  const cartCount = document.createElement("span");
-  cartCount.classList.add("cart-count");
-  cartCount.innerText = cartItems.length;
-  cartLink.appendChild(cartCount);
-
-  cart.appendChild(cartLink);
-  header.appendChild(cart);
-}
-
-// 본문 - 제품 표시
-function displayProducts() {
+document.addEventListener("DOMContentLoaded", function () {
   const mainElement = document.querySelector(".main-gm");
+  if (mainElement) {
+    displayProducts(mainElement, "all");
+  } else {
+    displayProductDetail();
+  }
 
-  // localStorage에서 제품 가져오기
-  let savedData = JSON.parse(localStorage.getItem("cartInfo")) || [];
+  loadWishlistState();
 
-  savedData.forEach((item) => {
-    const productDiv = document.createElement("div");
-    productDiv.classList.add("product");
+  // 카테고리 버튼 생성
+  const categoryButtons = document.createElement("div");
+  categoryButtons.classList.add("category-buttons");
+  categoryButtons.innerHTML = `
+    <button data-category="all">전체</button>
+    <button data-category="glasses">안경</button>
+    <button data-category="sunglasses">선글라스</button>
+  `;
 
-    // 장바구니 추가 버튼
-    const shoppingBtn = document.createElement("button");
-    shoppingBtn.innerText = "쇼핑백에 추가";
+  document
+    .querySelector(".header-gm")
+    .insertAdjacentElement("afterend", categoryButtons);
 
-    // 버튼 눌렀을 때 장바구니에 상품 추가
-    shoppingBtn.onclick = () => addShoppingCart(item);
-
-    // 가격 쉼표 추가
-    const formattedPrice = parseInt(item.price).toLocaleString();
-
-    // 각 제품의 내용 표시
-    productDiv.innerHTML = `
-              <img src="${item.picture}" alt="${item.name}" class="product-img" />
-              <div class="product-info">
-                <h3>${item.name}</h3>
-                <p>가격 ${formattedPrice}원</p>
-                <p>${item.content}</p>
-              </div>
-            `;
-
-    productDiv.appendChild(shoppingBtn);
-    mainElement.appendChild(productDiv);
+  // 버튼 클릭 시 필터링
+  categoryButtons.addEventListener("click", function (event) {
+    const category = event.target.getAttribute("data-category");
+    if (category) {
+      displayProducts(mainElement, category);
+    }
   });
+});
+
+document.querySelector(".main-gm").addEventListener("click", function (event) {
+  const clickedElement = event.target;
+
+  if (
+    clickedElement.classList.contains("product-img") ||
+    clickedElement.classList.contains("product-name")
+  ) {
+    const productId = clickedElement.getAttribute("data-id");
+    localStorage.setItem("selectedProduct", productId);
+    window.location.href = "/html/detail.html";
+  }
+
+  if (clickedElement.closest(".wishlist-button")) {
+    const button = clickedElement.closest(".wishlist-button");
+    const productId = button.closest(".product").getAttribute("data-id");
+    toggleWishlist(productId); // toggleWishlist 호출
+    updateHeartIcon(productId);
+    updateWishlistCount(); // 찜 목록 개수 업데이트
+  }
+});
+
+function displayProducts(mainElement, category) {
+  const savedData = JSON.parse(localStorage.getItem("cartInfo")) || [];
+  if (!savedData.length) {
+    console.error("🚨 저장된 제품이 없습니다!");
+    return;
+  }
+
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const filteredData =
+    category === "all"
+      ? savedData
+      : savedData.filter((product) => product.category === category);
+
+  mainElement.innerHTML = filteredData
+    .map(
+      (product) => `
+    <div class="product" data-id="${product.id}" data-category="${
+        product.category
+      }">
+      <img src="${product.picture}" alt="${
+        product.name
+      }" class="product-img" data-id="${product.id}" />
+      <h3 class="product-name" data-id="${product.id}">
+        ${product.name}
+        <button class="wishlist-button"><i class="${
+          wishlist.includes(product.id) ? "fas fa-heart" : "far fa-heart"
+        }"></i></button>
+      </h3>
+      <p class="product-price">${parseInt(product.price).toLocaleString()}원</p>
+    </div>
+  `
+    )
+    .join("");
 }
 
-// 장바구니에 상품 추가
-function addShoppingCart(item) {
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+function displayProductDetail() {
+  const productId = localStorage.getItem("selectedProduct");
+  if (!productId) {
+    console.error("🚨 선택된 제품 ID가 없습니다!");
+    return;
+  }
 
-  // 이미 장바구니에 있는지 확인
-  const productExists = cartItems.some((cartItem) => cartItem.id === item.id);
+  const savedData = JSON.parse(localStorage.getItem("cartInfo")) || [];
+  const product = savedData.find((item) => item.id === productId);
+  if (!product) {
+    console.error("🚨 해당 제품을 찾을 수 없습니다!");
+    return;
+  }
 
-  if (!productExists) {
-    cartItems.push({ ...item, quantity: 1 }); // 상품 추가 시 수량 1로 설정
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    updateCartCount();
-    alert("장바구니에 추가되었습니다!");
-    window.location.href = "/html/cart.html"; // 장바구니 페이지로 이동
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const isWished = wishlist.includes(productId);
+
+  const mainElement = document.querySelector(".main-gm");
+  if (!mainElement) return;
+
+  mainElement.innerHTML = `
+    <div class="product-detail">
+      <img src="${product.picture}" alt="${product.name}" class="product-img" />
+      <div class="product-info">
+        <h3 class="product-name">
+          ${product.name}
+          <button class="wishlist-button"><i class="${
+            isWished ? "fas fa-heart " : "far fa-heart "
+          }"></i></button>
+        </h3>
+        <p class="product-price">${parseInt(
+          product.price
+        ).toLocaleString()}원</p>
+        <p class="product-description">${product.content}</p>
+      </div>
+    </div>
+  `;
+
+  loadWishlistState();
+}
+
+function updateHeartIcon(productId) {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const heartIcon = document.querySelector(
+    `.product[data-id="${productId}"] .wishlist-button i`
+  );
+
+  if (wishlist.includes(productId)) {
+    heartIcon.classList.remove("far");
+    heartIcon.classList.add("fas");
   } else {
-    alert("이 상품은 이미 장바구니에 있습니다.");
+    heartIcon.classList.remove("fas");
+    heartIcon.classList.add("far");
   }
 }
 
-// 장바구니 아이콘 상품 갯수 업데이트
-function updateCartCount() {
-  const cartCount = document.querySelector(".cart-count");
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-  cartCount.innerText = cartItems.length;
+function toggleWishlist(productId) {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  if (wishlist.includes(productId)) {
+    const index = wishlist.indexOf(productId);
+    wishlist.splice(index, 1); // 찜 목록에서 제거
+  } else {
+    wishlist.push(productId); // 찜 목록에 추가
+  }
+
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
 }
+
+function loadWishlistState() {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  document.querySelectorAll(".wishlist-button").forEach((button) => {
+    const productId = button.closest(".product").getAttribute("data-id");
+    const heartIcon = button.querySelector("i");
+
+    if (wishlist.includes(productId)) {
+      heartIcon.classList.remove("far");
+      heartIcon.classList.add("fas");
+    } else {
+      heartIcon.classList.remove("fas");
+      heartIcon.classList.add("far");
+    }
+  });
+
+  updateWishlistCount(); // 찜 목록 개수 업데이트
+}
+
+function updateWishlistCount() {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  // 찜 목록의 숫자를 표시할 요소를 생성하거나 찾아서 표시
+  const wishlistCountElement = document.querySelector(".wishlist-count");
+  if (!wishlistCountElement) {
+    const newCountElement = document.createElement("div");
+    newCountElement.classList.add("wishlist-count");
+    newCountElement.style.position = "absolute";
+    newCountElement.style.top = "10px";
+    newCountElement.style.right = "10px";
+    newCountElement.style.backgroundColor = "red";
+    newCountElement.style.color = "white";
+    newCountElement.style.padding = "5px";
+    newCountElement.style.borderRadius = "50%";
+    newCountElement.style.fontWeight = "bold";
+    newCountElement.textContent = wishlist.length;
+    document.body.appendChild(newCountElement);
+  } else {
+    wishlistCountElement.textContent = wishlist.length;
+  }
+}
+
+// 스타일 변경 (CSS로 처리 가능)
+document.querySelectorAll(".wishlist-button").forEach((button) => {
+  button.addEventListener("mouseover", function () {
+    const heartIcon = button.querySelector("i");
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const productId = button.closest(".product").getAttribute("data-id");
+
+    // 찜하지 않은 상태일 때만 하트를 빨간색으로 바꿈
+    if (!wishlist.includes(productId)) {
+      heartIcon.classList.add("fas"); // 찜하지 않은 경우에만 마우스를 올리면 빨간 하트로 변경
+    }
+  });
+
+  button.addEventListener("mouseout", function () {
+    const heartIcon = button.querySelector("i");
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const productId = button.closest(".product").getAttribute("data-id");
+
+    // 찜하지 않은 상태일 때만 회색 하트로 돌아가게 설정
+    if (!wishlist.includes(productId)) {
+      heartIcon.classList.remove("fas");
+      heartIcon.classList.add("far"); // 클릭하지 않은 상태로 돌아가면 회색 하트로 변경
+    }
+  });
+});

@@ -1,96 +1,394 @@
 /* Reset 스타일 초기화 */
-body,
-html,
-div,
-a,
-img {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
 }
 
-/* 헤더 전체 스타일 */
-.header-gm {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  background-color: #f8f9fa;
-  height: 60px;
-  border-bottom: 1px solid #ddd;
-}
-
-/* 로고 스타일 */
-.logo img {
-  height: 40px;
-}
-
-/* 로그인 버튼 스타일 */
-.login a {
-  text-decoration: none;
+body {
+  background-color: white;
   color: #333;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #fff;
-  transition: background-color 0.3s;
-}
-
-.login a:hover {
-  background-color: #f0f0f0;
-}
-
-/* 장바구니 아이콘 스타일 */
-.cart img {
-  height: 30px;
-  width: 30px;
-  object-fit: contain;
-  cursor: pointer;
-}
-
-/* main 영역에 제품들이 4개씩 한 줄에 보이도록 스타일 추가 */
-.main-gm {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start; /* 제품들이 왼쪽에서부터 쌓이도록 설정 */
-  padding: 20px;
-}
-
-/* 제품 스타일 */
-.product {
-  border: 1px solid #ddd;
-  padding: 20px;
-  margin: 10px;
-  width: calc(25% - 20px); /* 한 줄에 4개씩 */
-  box-sizing: border-box;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* 헤더 스타일 */
+.header-gm {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 32px;
+  font-optical-sizing: auto;
+}
+
+/* 로고 링크 스타일 */
+.logo a {
+  text-decoration: none;
+  color: #000;
+}
+
+/* 로그인 & 장바구니 버튼을 오른쪽 끝으로 */
+.header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 20px;
+}
+
+/* 모달 스타일 */
+.modal {
+  display: none; /* 처음에는 숨겨둠 */
+  position: fixed;
+  z-index: 1; /* 화면 위에 표시 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* 배경 어두운 색 */
+  overflow: auto; /* 스크롤이 생기지 않도록 */
+  padding-top: 200px;
+}
+
+/* 모달 내용 스타일 */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%; /* 크기 조정 */
   text-align: center;
 }
 
-/* 제품 이미지 스타일 */
-.product-img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  margin-bottom: 10px;
+/* 닫기 버튼 */
+.close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
-/* 제품 정보 스타일 */
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.category-buttons {
+  text-align: center;
+  margin-top: 80px; /* 헤더와의 간격 조정 */
+  margin-bottom: 20px;
+}
+.category-buttons button {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+/* 카테고리(선글라스, 안경) 스타일 */
+.categories {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  flex-grow: 1; /* 나머지 공간을 차지하도록 설정 */
+}
+
+.categories a {
+  margin: 0 15px; /* 카테고리 간 간격을 설정 */
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.categories a:hover {
+  cursor: pointer;
+}
+
+/* 로그인 버튼 */
+.login {
+  margin-left: auto;
+}
+
+.login a {
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 8px 16px;
+  background-color: transparent;
+}
+
+.wishlist i {
+  color: black; /* 검정색 하트 */
+  font-size: 20px;
+}
+
+.wishlist {
+  margin-right: auto;
+}
+
+/* 기존 장바구니 숫자 스타일과 동일하게 설정 */
+.wishlist-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 장바구니 아이콘 */
+.cart {
+  position: relative;
+}
+
+.cart img {
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.cart img:hover {
+  transform: scale(1.1);
+}
+
+/* 장바구니 숫자 */
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 본문이 푸터를 밀어내도록 설정 */
+.main-gm {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  padding: 100px 10px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 상품 카드 스타일 */
+.product {
+  text-align: left;
+  padding: 5px;
+  position: relative;
+}
+.product-name {
+  flex-grow: 1; /* 가능한 공간을 모두 차지하도록 설정 */
+  text-align: left; /* 왼쪽 정렬 */
+}
+
 .product-info {
-  flex: 1;
+  display: flex;
+  flex-direction: row; /* 가로 배치 */
+  justify-content: space-between; /* 양쪽 끝으로 배치 */
+  align-items: center;
+  width: 100%;
 }
 
-/* 제품 제목 스타일 */
+/* 상품 이미지 */
+.product-img {
+  width: 100%; /* 이미지의 가로를 100%로 설정 */
+  max-height: 100%;
+}
+
+/* 마우스 호버 시 이미지에 효과 추가 */
+.product:hover .product-img {
+  cursor: pointer;
+}
+
+.product-info h3:hover,
+.product-info p:hover {
+  cursor: pointer; /* 마우스 호버 시 커서 변경 */
+}
+
+/* 상품 이름과 찜 버튼을 수평으로 배치 */
+.product-name-wrapper {
+  display: flex;
+  justify-content: space-between; /* 양 끝에 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 전체 너비 사용 */
+}
+
+/* 찜 버튼이 이름과 같은 높이에 있도록 수정 */
+.wishlist-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px; /* 하트 아이콘 크기 */
+  transition: color 0.3s ease-in-out;
+  margin-left: 10px; /* 제품 이름과 하트 사이에 여백 추가 */
+  align-self: center; /* 세로 중앙 정렬 */
+}
+
+/* 상품 이름 스타일 */
+.product-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  flex-grow: 1; /* 가능한 공간을 모두 차지하도록 설정 */
+}
+
 .product h3 {
-  font-size: 1.2em;
+  font-size: 15px;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
-/* 제품 가격 및 상세 내용 스타일 */
+.product-info .product-name-wrapper {
+  display: flex;
+  justify-content: space-between; /* 이름과 하트를 양끝으로 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 전체 너비를 사용 */
+}
+
 .product p {
-  margin: 5px 0;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+/* 찜목록에 추가된 경우 빨간 하트 */
+.wishlist-button.active {
+  color: red; /* 빨간 하트 */
+}
+
+/* 마우스 호버 시 빨간색 가득찬 하트로 변환 */
+.wishlist-button:hover i {
+  color: red; /* 호버 시 빨간색 */
+}
+
+/* 푸터 스타일 */
+.footer-gm {
+  background-color: #f8f8f8;
+  padding: 20px 0;
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  width: 100%;
+  margin-top: auto; /* 본문 아래에 자동으로 위치 */
+  display: flex;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  position: relative; /* 위치를 조정할 수 있도록 설정 */
+}
+
+/* 푸터 텍스트 스타일 */
+.footer-text {
+  position: absolute;
+  bottom: 10px;
+  left: 20px; /* 왼쪽에 위치 */
+  font-size: 14px;
+  color: #333;
+}
+
+/* 푸터 콘텐츠 */
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: 20px; /* 푸터 텍스트 위 여백 추가 */
+  gap: 30px; /* 항목들 사이에 간격을 추가 */
+}
+
+/* footer 각 카테고리 스타일 */
+.footer-category {
+  text-align: left;
+  padding: 40px;
+}
+.footer-category h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.footer-category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-category ul li {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* 법적 고지 카테고리와 개인정보 처리방침 카테고리 */
+.footer-category.legal-notice ul {
+  margin-bottom: 10px; /* 법적 고지 항목들 간격 */
+}
+
+/* 개인정보 처리방침을 법적 고지 항목 아래에 배치 */
+.footer-category.legal-notice .privacy-policy {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* 세로로 배치 */
+    align-items: center;
+  }
+
+  .footer-category {
+    width: 100%; /* 푸터 항목들이 세로로 배치될 때 전체 너비 사용 */
+    margin-bottom: 20px;
+  }
+
+  .main-gm {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding: 90px 20px 20px; /* 푸터 공간 조정 */
+  }
+}
+/* ✨ 반응형 스타일 */
+@media (max-width: 768px) {
+  .header-gm {
+    padding: 0 20px;
+  }
+
+  .product-img {
+    height: 250px;
+  }
+  .login a {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
 }

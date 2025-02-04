@@ -1,0 +1,72 @@
+/* 헤더가 고정되어 있을 경우 */
+.header-gm {
+  position: fixed; /* 헤더 고정 */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* 헤더가 다른 콘텐츠 위로 오도록 */
+  background-color: #fff; /* 헤더 배경 색상 (필요시 설정) */
+  padding: 20px 0; /* 헤더 안쪽 여백 설정 */
+}
+
+/* 전체 상품 상세 정보 컨테이너 */
+.product-detail {
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  gap: 20%; /* 이미지와 글 사이 간격 */
+  padding: 40px;
+  position: relative; /* 상대 위치로 설정 */
+  z-index: 0; /* 기본적인 z-index 값 (헤더 아래로 설정) */
+  margin-top: 80px; /* 헤더 아래에 여백을 추가 */
+}
+
+/* 이미지 스타일 */
+.detail-img {
+  width: 350px; /* 이미지의 크기 조정 */
+  height: auto; /* 비율 유지 */
+  z-index: 0; /* 이미지가 헤더 아래로 오도록 z-index 값 설정 */
+}
+
+/* 글 내용 스타일 */
+.detail-info {
+  max-width: 600px;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+/* 제목 스타일 */
+.detail-info h2 {
+  font-size: 23px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  letter-spacing: -0.5px; /* 글자 간격 좁히기 */
+}
+
+/* 가격 스타일 */
+.detail-info p {
+  font-size: 15px;
+  margin-bottom: 15px;
+  line-height: 1.5; /* 줄 간격 */
+}
+
+/* 버튼 스타일 */
+#addToCart {
+  padding: 12px 25px;
+  background-color: #000; /* 검정색 배경 */
+  color: #fff; /* 흰색 텍스트 */
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.wishlist-button i {
+  color: red;
+}

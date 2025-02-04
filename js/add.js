@@ -3,9 +3,9 @@ const table = document.createElement("table");
 const thead = document.createElement("thead");
 const tbody = document.createElement("tbody");
 
-// 테이블 헤더 생성
+// 테이블 헤더에 '카테고리' 추가
 const tr1 = document.createElement("tr");
-["사진", "이름", "가격", "상세내용", "관리"].forEach((text) => {
+["사진", "카테고리", "이름", "가격", "상세내용", "관리"].forEach((text) => {
   const th = document.createElement("th");
   th.innerText = text;
   tr1.appendChild(th);
@@ -41,7 +41,7 @@ const imagePaths = [
   "../img/wispy-y8.jpg",
   "../img/hush-w2.jpg",
   "../img/glitter-02.jpg",
-  "../img/fishtail-br3,jpg",
+  "../img/fishtail-br3.jpg",
   "../img/fishtail-01.jpg",
   "../img/donutbun-br3.jpg",
   "../img/donutbun-bl5.jpg",
@@ -54,6 +54,16 @@ const imagePaths = [
   "../img/11001_MM104_W2.jpg",
   "../img/11001_MM104_LEATHER_LK11.jpg",
   "../img/11001_MM104_LEATHER_L01.jpg",
+  "../img/aba 02.jpg",
+  "../img/aca 02.jpg",
+  "../img/bonzo 01.jpg",
+  "../img/ele 02.jpg",
+  "../img/ep 02.jpg",
+  "../img/ep 031.jpg",
+  "../img/jf brc1.jpg",
+  "../img/met 02.jpg",
+  "../img/ojo gc9.jpg",
+  "../img/yona 031.jpg",
 ];
 
 // 저장 버튼
@@ -104,18 +114,44 @@ function checkedFailed(input) {
   saveButton.disabled = !isValid;
 }
 
-// 저장 버튼
+// 카테고리 선택
+const categoryList = document.getElementById("category-list");
+let selectedCategory = "glasses"; // 기본 선택값은 안경으로 설정
+
+// 카테고리 항목 클릭 시 선택된 카테고리 변경
+categoryList.addEventListener("click", function (event) {
+  const clickedItem = event.target;
+  if (clickedItem.classList.contains("category-dot")) {
+    selectedCategory = clickedItem.getAttribute("data-category");
+
+    // 모든 항목에서 선택된 상태 제거
+    const items = categoryList.querySelectorAll(".category-dot");
+    items.forEach((item) => item.classList.remove("selected"));
+
+    // 선택된 항목에 스타일 적용
+    clickedItem.classList.add("selected");
+  }
+});
+
+// 저장 버튼 기능 수정
 function saveData() {
   const idElement = document.getElementById("id");
   const nameElement = document.getElementById("name");
   const priceElement = document.getElementById("price");
   const contentElement = document.getElementById("content");
 
+  // 'categoryElement' 대신, 선택된 카테고리 값을 직접 가져옴
+  const categoryElement = document.querySelector(".category-dot.selected"); // 클릭된 category-dot 가져오기
+  const selectedCategory = categoryElement
+    ? categoryElement.getAttribute("data-category")
+    : "glasses"; // 기본값 안경
+
   const randomImage = imagePaths[Math.floor(Math.random() * imagePaths.length)];
 
   const cartInfo = {
     id: idElement.value.trim(),
     picture: randomImage,
+    category: selectedCategory, // 수정된 부분
     name: nameElement.value.trim(),
     price: priceElement.value.trim(),
     content: contentElement.value.trim(),
@@ -142,11 +178,13 @@ function addRowToTable(cartInfo) {
   const tdImage = document.createElement("td");
   const img = document.createElement("img");
   img.src = cartInfo.picture;
-  img.art = "사진";
-  img.style.width = "50px";
-  img.style.height = "50px";
   tdImage.appendChild(img);
   tr.appendChild(tdImage);
+
+  // 카테고리 추가
+  const tdCategory = document.createElement("td");
+  tdCategory.innerText = cartInfo.category;
+  tr.appendChild(tdCategory);
 
   // 이름, 가격, 내용
   ["name", "price", "content"].forEach((key, index) => {
@@ -159,16 +197,15 @@ function addRowToTable(cartInfo) {
     tr.appendChild(td);
   });
 
-  // 관리 버튼
+  // 관리 버튼 추가
+  // 수정
   const tdManage = document.createElement("td");
-
-  // 수정 버튼
   const editBtn = document.createElement("button");
-  editBtn.innerHTML = "수정";
+  editBtn.innerText = "수정";
   editBtn.onclick = () => editRow(cartInfo, tr);
   tdManage.appendChild(editBtn);
 
-  //삭제 버튼
+  // 삭제 버튼
   const deleteBtn = document.createElement("button");
   deleteBtn.innerText = "삭제";
   deleteBtn.onclick = () => remove_tr(deleteBtn);
@@ -181,13 +218,26 @@ function addRowToTable(cartInfo) {
 // 수정
 // 이름, 가격, 내용
 function editRow(cartInfo, row) {
-  const nameCell = row.cells[1];
-  const priceCell = row.cells[2];
-  const contentCell = row.cells[3];
+  const categoryCell = row.cells[1]; // 카테고리 셀
+  const nameCell = row.cells[2];
+  const priceCell = row.cells[3];
+  const contentCell = row.cells[4];
 
+  // 기존 값 저장
+  const originalCategory = categoryCell.innerText;
   const originalName = nameCell.innerText;
   const originalPrice = priceCell.innerText;
-  const originalContnet = contentCell.innerText;
+  const originalContent = contentCell.innerText;
+
+  // 입력 필드 생성
+  const categorySelect = document.createElement("select");
+  ["glasses", "sunglasses"].forEach((optionValue) => {
+    const option = document.createElement("option");
+    option.value = optionValue;
+    option.innerText = optionValue;
+    if (optionValue === originalCategory) option.selected = true;
+    categorySelect.appendChild(option);
+  });
 
   const nameInput = document.createElement("input");
   const priceInput = document.createElement("input");
@@ -199,12 +249,15 @@ function editRow(cartInfo, row) {
 
   nameInput.value = originalName;
   priceInput.value = originalPrice;
-  contentInput.value = originalContnet;
+  contentInput.value = originalContent;
 
+  // 기존 셀 내용을 지우고 입력 필드 추가
+  categoryCell.innerHTML = "";
   nameCell.innerHTML = "";
   priceCell.innerHTML = "";
   contentCell.innerHTML = "";
 
+  categoryCell.appendChild(categorySelect);
   nameCell.appendChild(nameInput);
   priceCell.appendChild(priceInput);
   contentCell.appendChild(contentInput);
@@ -233,35 +286,38 @@ function editRow(cartInfo, row) {
     validateField(contentInput, "content", contentError);
   });
 
-  // 수정완료버튼
-  const editBtn = row.cells[4].querySelector("button");
+  // 수정 버튼 변경
+  const editBtn = row.cells[5].querySelector("button");
   editBtn.innerText = "수정완료";
 
   editBtn.onclick = () => {
+    const newCategory = categorySelect.value;
     const newName = nameInput.value.trim();
     const newPrice = parseInt(priceInput.value.trim());
     const newContent = contentInput.value.trim();
 
     let isValid = true;
 
-    // 최종 검증
-    isValid =
-      validateField(nameInput, "name", nameError) &
-      validateField(priceInput, "price", priceError) &
-      validateField(contentInput, "content", contentError);
+    if (newName === "" || newPrice < 100 || newContent.length < 10) {
+      alert("올바른 값을 입력하세요.");
+      isValid = false;
+    }
 
     if (!isValid) return;
 
-    // 로컬스토리지 수정
-
-    nameCell.innerHTML = newName;
-    priceCell.innerHTML = newPrice;
-    contentCell.innerHTML = newContent;
-
+    // 수정된 데이터 저장
+    cartInfo.category = newCategory;
     cartInfo.name = newName;
     cartInfo.price = newPrice;
     cartInfo.content = newContent;
+
     localStorage.setItem("cartInfo", JSON.stringify(savedData));
+
+    // UI 업데이트
+    categoryCell.innerText = newCategory;
+    nameCell.innerText = newName;
+    priceCell.innerText = newPrice.toLocaleString();
+    contentCell.innerText = newContent;
 
     editBtn.innerText = "수정";
     editBtn.onclick = () => editRow(cartInfo, row);
@@ -271,7 +327,7 @@ function editRow(cartInfo, row) {
 // 삭제버튼 클릭시 행 삭제
 function remove_tr(This) {
   const row = This.closest("tr");
-  const id = row.cells[1].innerText;
+  const id = row.cells[2].innerText;
 
   savedData = savedData.filter((cart) => cart.name !== id);
   localStorage.setItem("cartInfo", JSON.stringify(savedData));

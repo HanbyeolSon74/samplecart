@@ -1,0 +1,139 @@
+/* 장바구니 페이지 스타일 */
+body {
+  font-family: "Pretendard", sans-serif;
+  background-color: #f5f5f5;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+.shopping_cart {
+  max-width: 1000px; /* 장바구니 넓이 */
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  margin: auto;
+}
+
+/* 장바구니 제목 */
+.cart-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 장바구니 비었을 때 */
+.cart-empty-message {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+  padding: 20px;
+}
+
+/* 개별 장바구니 상품 */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 25px 0;
+  margin: 50px 100px;
+  border-bottom: 1px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* 상품 이미지 */
+.cart-img {
+  width: 200px; /* 📸 이미지 크기 증가 */
+  height: 200px;
+  border-radius: 10px;
+  margin-right: 300px; /* 📏 이미지와 텍스트 간격 증가 */
+}
+
+/* 상품 정보 */
+.cart-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 위쪽 정렬 */
+  gap: 10px; /* 정보 간격 */
+}
+
+.cart-info h3 {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.cart-info p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* 수량 조절 input */
+.quantity-input {
+  width: 60px;
+  padding: 5px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* 삭제 버튼 (상품 정보 아래로 이동) */
+.remove-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s;
+  align-self: flex-start; /* 왼쪽 정렬 */
+}
+
+.remove-btn:hover {
+  color: #222;
+}
+
+/* 장바구니 비우기 & 결제하기 버튼 컨테이너 */
+.cart-buttons {
+  display: flex;
+  justify-content: center; /* 버튼들을 중앙 정렬 */
+  gap: 40px; /* 버튼 간 간격 */
+  margin: 40px;
+}
+
+/* 버튼 스타일 */
+.clear-cart-btn,
+.checkout-btn {
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 180px; /* 버튼 너비 설정 */
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  display: inline-block; /* 버튼을 인라인 블록으로 설정 */
+}
+
+.clear-cart-btn {
+  background: #ddd;
+  color: #555;
+}
+
+.clear-cart-btn:hover {
+  background: #bbb;
+}
+
+.checkout-btn {
+  background: #000;
+  color: #fff;
+}
+
+.checkout-btn:hover {
+  background: #444;
+}
