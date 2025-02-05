@@ -140,8 +140,34 @@ function saveData() {
   const priceElement = document.getElementById("price");
   const contentElement = document.getElementById("content");
 
-  // 'categoryElement' 대신, 선택된 카테고리 값을 직접 가져옴
-  const categoryElement = document.querySelector(".category-dot.selected"); // 클릭된 category-dot 가져오기
+  const id = idElement.value.trim();
+  const name = nameElement.value.trim();
+  const price = priceElement.value.trim();
+  const content = contentElement.value.trim();
+
+  // 유효성 검사
+  if (!id) {
+    alert("아이디를 입력하세요.");
+    return;
+  }
+  if (savedData.some((cart) => cart.id === id)) {
+    alert("아이디가 중복됩니다.");
+    return;
+  }
+  if (!name) {
+    alert("이름을 입력하세요.");
+    return;
+  }
+  if (!price || parseInt(price) < 100) {
+    alert("가격은 최소 100원 이상이어야 합니다.");
+    return;
+  }
+  if (!content || content.length < 10) {
+    alert("내용은 최소 10자 이상이어야 합니다.");
+    return;
+  }
+
+  const categoryElement = document.querySelector(".category-dot.selected");
   const selectedCategory = categoryElement
     ? categoryElement.getAttribute("data-category")
     : "glasses"; // 기본값 안경
@@ -149,12 +175,12 @@ function saveData() {
   const randomImage = imagePaths[Math.floor(Math.random() * imagePaths.length)];
 
   const cartInfo = {
-    id: idElement.value.trim(),
+    id: id,
     picture: randomImage,
-    category: selectedCategory, // 수정된 부분
-    name: nameElement.value.trim(),
-    price: priceElement.value.trim(),
-    content: contentElement.value.trim(),
+    category: selectedCategory,
+    name: name,
+    price: parseInt(price),
+    content: content,
   };
 
   savedData.push(cartInfo);

@@ -173,28 +173,20 @@ function loadWishlistState() {
   updateWishlistCount(); // 찜 목록 개수 업데이트
 }
 
+// 찜 목록 갯수
 function updateWishlistCount() {
-  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const wishlistRaw = localStorage.getItem("wishlist");
+  const wishlist = wishlistRaw ? JSON.parse(wishlistRaw) : [];
 
-  // 찜 목록의 숫자를 표시할 요소를 생성하거나 찾아서 표시
   const wishlistCountElement = document.querySelector(".wishlist-count");
-  if (!wishlistCountElement) {
-    const newCountElement = document.createElement("div");
-    newCountElement.classList.add("wishlist-count");
-    newCountElement.style.position = "absolute";
-    newCountElement.style.top = "10px";
-    newCountElement.style.right = "10px";
-    newCountElement.style.backgroundColor = "red";
-    newCountElement.style.color = "white";
-    newCountElement.style.padding = "5px";
-    newCountElement.style.borderRadius = "50%";
-    newCountElement.style.fontWeight = "bold";
-    newCountElement.textContent = wishlist.length;
-    document.body.appendChild(newCountElement);
-  } else {
+  if (wishlistCountElement) {
     wishlistCountElement.textContent = wishlist.length;
+    wishlistCountElement.style.display = wishlist.length > 0 ? "block" : "none"; // 0이면 숨김
   }
 }
+
+// 찜 목록 변경 시 업데이트 (이벤트 리스너 활용)
+window.addEventListener("storage", updateWishlistCount);
 
 // 스타일 변경 (CSS로 처리 가능)
 document.querySelectorAll(".wishlist-button").forEach((button) => {
