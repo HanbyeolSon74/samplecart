@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     displayProductDetail();
   }
 
-  loadWishlistState();
+  createHeader(); // 헤더 생성
+  loadWishlistState(); // 찜목록 상태 로드 및 갱신
   updateCartCount(); // 페이지 로드 시 장바구니 숫자 업데이트
 });
 
@@ -68,22 +69,6 @@ function displayProductDetail() {
     });
 }
 
-// 장바구니 추가 함수
-function addShoppingCart(item) {
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
-  const productExists = cartItems.some((cartItem) => cartItem.id === item.id);
-
-  if (!productExists) {
-    cartItems.push({ ...item, quantity: 1 });
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    alert("장바구니에 추가되었습니다!");
-    updateCartCount();
-  } else {
-    alert("이 상품은 이미 장바구니에 있습니다.");
-  }
-}
-
 // 찜 목록에 상품 추가/제거
 function toggleWishlist(productId) {
   let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
@@ -142,4 +127,22 @@ function updateCartCount() {
   }
 
   cartCountElement.textContent = cartCount;
+}
+
+// 장바구니 추가
+function addShoppingCart(product) {
+  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+  // 중복 확인 후 수량 증가
+  let existingItem = cartItems.find((item) => item.id === product.id);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    product.quantity = 1;
+    cartItems.push(product);
+  }
+
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  updateCartCount(); // 장바구니 숫자 업데이트
+  alert("상품이 장바구니에 추가되었습니다!");
 }

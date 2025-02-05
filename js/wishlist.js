@@ -1,4 +1,3 @@
-// 헤더와 찜목록 상태 초기화
 document.addEventListener("DOMContentLoaded", function () {
   createHeader(); // 헤더 생성
   loadWishlistState(); // 찜목록 상태 로드 및 갱신

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   createHeader(); // 헤더 생성
   loadWishlistState(); // 찜목록 상태 로드 및 갱신
 
+  // 상세 페이지에서 찜 버튼 설정
   if (document.querySelector(".wishlist-button")) {
     setupWishlistButton(); // 상세 페이지의 찜 버튼 설정
   }
@@ -93,6 +94,15 @@ function createHeader() {
 function loadWishlistState() {
   const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
+  // 헤더에서만 찜 상태 갱신
+  const wishlistCount = document.querySelector(".wishlist-count");
+  if (wishlistCount) {
+    const count = wishlist.length;
+    wishlistCount.innerText = count;
+    wishlistCount.style.display = count > 0 ? "inline" : "none";
+  }
+
+  // 찜 목록 아이콘 상태 갱신
   document.querySelectorAll(".wishlist-button").forEach((button) => {
     const product = button.closest(".product");
     let productId = null;
@@ -125,8 +135,6 @@ function loadWishlistState() {
       toggleWishlist(button, productId);
     });
   });
-
-  updateWishlistCount();
 }
 
 // 상세 페이지 찜 버튼 설정
