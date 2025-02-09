@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>메인 페이지</title>
+    <!-- Google Fonts, Font Awesome, SweetAlert2 등 -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap"
@@ -12,20 +13,52 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-
     <link rel="stylesheet" href="/css/main.css" />
-    <script src="/js/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- 헤더 관련 JS는 body 위쪽에 로드하지 않고 body 끝에 두거나 defer 옵션 사용 -->
   </head>
   <body>
-    <!-- 헤더 -->
-    <header class="header-gm"></header>
+    <!-- 헤더 (정적 HTML) -->
+    <header class="header-gm">
+      <div class="header-left">
+        <div class="logo">
+          <a href="/html/main.html">Sleek Lens</a>
+        </div>
+      </div>
+      <div class="header-right">
+        <!-- 찜한 상품 -->
+        <div class="wishlist">
+          <a href="/html/wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span class="wishlist-count">0</span>
+          </a>
+        </div>
+        <!-- 로그인 -->
+        <div class="login">
+          <a href="#" id="login-link">로그인</a>
+        </div>
+        <!-- 장바구니 -->
+        <div class="cart">
+          <a href="/html/cart.html">
+            <img src="/img/shopping_bag.png" alt="Cart" />
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </header>
 
     <!-- 본문 -->
-    <div class="main-gm"></div>
+    <div class="main-gm">
+      <!-- 페이지 본문 내용 -->
+    </div>
 
     <!-- 푸터 -->
-    <div class="footer-gm"></div>
+    <footer class="footer-gm">
+      <!-- 푸터 내용 -->
+    </footer>
 
+    <!-- JS 파일들 -->
+    <script src="/js/header.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/footer.js"></script>
   </body>

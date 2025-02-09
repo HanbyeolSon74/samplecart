@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
   categoryButtons.classList.add("category-buttons");
   categoryButtons.innerHTML = `
     <button data-category="all">전체</button>
-    <button data-category="glasses">안경</button>
-    <button data-category="sunglasses">선글라스</button>
+    <button data-category="Glasses">안경</button>
+    <button data-category="Sunglasses">선글라스</button>
   `;
 
   document
@@ -51,20 +51,46 @@ document.querySelector(".main-gm").addEventListener("click", function (event) {
   }
 });
 
+let filteredData = []; // 전역 변수로 설정
+let currentPage = 1;
+const itemsPerPage = 15; // 한 페이지당 표시할 제품 개수
+
 function displayProducts(mainElement, category) {
   const savedData = JSON.parse(localStorage.getItem("cartInfo")) || [];
   if (!savedData.length) {
-    console.error("🚨 저장된 제품이 없습니다!");
+    Swal.fire({
+      icon: "error",
+      title: "제품이 없습니다!",
+      text: "저장된 제품이 없습니다!",
+    });
     return;
   }
 
   const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-  const filteredData =
+
+  // 카테고리가 all일 경우 모든 제품을 보여주고, 그 외에는 필터링
+  filteredData =
     category === "all"
       ? savedData
-      : savedData.filter((product) => product.category === category);
+      : savedData.filter((product) => {
+          return (
+            product.category &&
+            product.category.trim().toLowerCase() === category.toLowerCase()
+          );
+        });
+  currentPage = 1; // 새 필터가 적용되면 첫 페이지로 초기화
+  displayPage(mainElement, currentPage);
+  displayPagination();
+}
 
-  mainElement.innerHTML = filteredData
+function displayPage(mainElement, page) {
+  mainElement.innerHTML = "";
+
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedData = filteredData.slice(start, end);
+
+  mainElement.innerHTML = paginatedData
     .map(
       (product) => `
     <div class="product" data-id="${product.id}" data-category="${
@@ -76,7 +102,11 @@ function displayProducts(mainElement, category) {
       <h3 class="product-name" data-id="${product.id}">
         ${product.name}
         <button class="wishlist-button"><i class="${
-          wishlist.includes(product.id) ? "fas fa-heart" : "far fa-heart"
+          JSON.parse(localStorage.getItem("wishlist") || "[]").includes(
+            product.id
+          )
+            ? "fas fa-heart"
+            : "far fa-heart"
         }"></i></button>
       </h3>
       <p class="product-price">${parseInt(product.price).toLocaleString()}원</p>
@@ -89,14 +119,22 @@ function displayProducts(mainElement, category) {
 function displayProductDetail() {
   const productId = localStorage.getItem("selectedProduct");
   if (!productId) {
-    console.error("🚨 선택된 제품 ID가 없습니다!");
+    Swal.fire({
+      icon: "error",
+      title: "제품을 찾을 수 없음",
+      text: "선택된 제품 ID가 없습니다!",
+    });
     return;
   }
 
   const savedData = JSON.parse(localStorage.getItem("cartInfo")) || [];
   const product = savedData.find((item) => item.id === productId);
   if (!product) {
-    console.error("🚨 해당 제품을 찾을 수 없습니다!");
+    Swal.fire({
+      icon: "error",
+      title: "제품을 찾을 수 없음",
+      text: "해당 제품을 찾을 수 없습니다!",
+    });
     return;
   }
 
@@ -213,3 +251,32 @@ document.querySelectorAll(".wishlist-button").forEach((button) => {
     }
   });
 });
+
+// 페이지네이션
+function displayPagination() {
+  let paginationElement = document.querySelector(".pagination");
+
+  if (!paginationElement) {
+    paginationElement = document.createElement("div");
+    paginationElement.classList.add("pagination");
+    document
+      .querySelector(".main-gm")
+      .insertAdjacentElement("afterend", paginationElement);
+  }
+
+  paginationElement.innerHTML = "";
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const button = document.createElement("button");
+    button.textContent = i;
+    button.classList.add("page-button");
+    if (i === currentPage) button.classList.add("active");
+    button.addEventListener("click", function () {
+      currentPage = i;
+      displayPage(document.querySelector(".main-gm"), currentPage);
+      displayPagination();
+    });
+    paginationElement.appendChild(button);
+  }
+}

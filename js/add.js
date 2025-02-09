@@ -1,9 +1,15 @@
-// 테이블
+// 테이블 생성
 const table = document.createElement("table");
 const thead = document.createElement("thead");
 const tbody = document.createElement("tbody");
 
-// 테이블 헤더에 '카테고리' 추가
+// 다운로드 버튼 추가
+const downloadButton = document.createElement("button");
+downloadButton.innerText = "다운로드";
+downloadButton.addEventListener("click", downloadCSV);
+document.querySelector(".main-wrap").appendChild(downloadButton);
+
+// 테이블 헤더 설정
 const tr1 = document.createElement("tr");
 ["사진", "카테고리", "이름", "가격", "상세내용", "관리"].forEach((text) => {
   const th = document.createElement("th");
@@ -116,7 +122,7 @@ function checkedFailed(input) {
 
 // 카테고리 선택
 const categoryList = document.getElementById("category-list");
-let selectedCategory = "glasses"; // 기본 선택값은 안경으로 설정
+let selectedCategory = "Glasses"; // 기본 선택값은 안경으로 설정
 
 // 카테고리 항목 클릭 시 선택된 카테고리 변경
 categoryList.addEventListener("click", function (event) {
@@ -170,7 +176,7 @@ function saveData() {
   const categoryElement = document.querySelector(".category-dot.selected");
   const selectedCategory = categoryElement
     ? categoryElement.getAttribute("data-category")
-    : "glasses"; // 기본값 안경
+    : "Glasses"; // 기본값 안경
 
   const randomImage = imagePaths[Math.floor(Math.random() * imagePaths.length)];
 
@@ -242,7 +248,6 @@ function addRowToTable(cartInfo) {
 }
 
 // 수정
-// 이름, 가격, 내용
 function editRow(cartInfo, row) {
   const categoryCell = row.cells[1]; // 카테고리 셀
   const nameCell = row.cells[2];
@@ -274,7 +279,7 @@ function editRow(cartInfo, row) {
   contentInput.type = "text";
 
   nameInput.value = originalName;
-  priceInput.value = originalPrice;
+  priceInput.value = parseInt(originalPrice.replace(/,/g, ""), 10) || ""; // 기존 값 유지
   contentInput.value = originalContent;
 
   // 기존 셀 내용을 지우고 입력 필드 추가
@@ -319,7 +324,9 @@ function editRow(cartInfo, row) {
   editBtn.onclick = () => {
     const newCategory = categorySelect.value;
     const newName = nameInput.value.trim();
-    const newPrice = parseInt(priceInput.value.trim());
+    const newPrice = priceInput.value.trim()
+      ? parseInt(priceInput.value.trim(), 10)
+      : parseInt(originalPrice.replace(/,/g, ""), 10); // 빈 값이면 기존 값 유지
     const newContent = contentInput.value.trim();
 
     let isValid = true;
@@ -392,4 +399,23 @@ function validateField(input, type, errorElement) {
   }
 
   return isValid;
+}
+
+// 테이블 데이터 CSV 다운로드
+function downloadCSV() {
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "사진,카테고리,이름,가격,상세내용\n"; // 헤더 추가
+
+  savedData.forEach((cartInfo) => {
+    let row = `${cartInfo.picture},${cartInfo.category},${cartInfo.name},${cartInfo.price},${cartInfo.content}`;
+    csvContent += row + "\n";
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "cart_data.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }

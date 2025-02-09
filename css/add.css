@@ -73,6 +73,13 @@ body {
   background-color: #333;
 }
 
+/* 다운로드 버ㄴ */
+.download-btn {
+  float: right;
+  margin-bottom: 10px;
+}
+
+/* 카테고리 */
 #category-list {
   display: flex;
   gap: 20px; /* 각 항목 사이 간격 */

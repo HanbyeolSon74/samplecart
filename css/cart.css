@@ -7,14 +7,6 @@ body {
   padding: 0;
 }
 
-.shopping_cart {
-  max-width: 1000px; /* 장바구니 넓이 */
-  background: #fff;
-  padding: 40px;
-  border-radius: 12px;
-  margin: auto;
-}
-
 /* 장바구니 제목 */
 .cart-title {
   font-size: 28px;
@@ -23,12 +15,21 @@ body {
   text-align: center;
 }
 
-/* 장바구니 비었을 때 */
+/* 장바구니 컨테이너 여백 조정 */
+.shopping_cart {
+  max-width: 1000px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  margin: 80px auto;
+}
+
+/* 장바구니 비었을 때 메시지 */
 .cart-empty-message {
   text-align: center;
   font-size: 18px;
   color: #888;
-  padding: 20px;
+  padding: 50px 20px;
 }
 
 /* 개별 장바구니 상품 */

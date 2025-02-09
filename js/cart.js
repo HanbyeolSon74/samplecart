@@ -1,21 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
-  displayCartItems(); // 먼저 장바구니 항목 표시
-  addClearCartButton(); // 장바구니 비우기 버튼 추가
-  addCheckoutButton(); // 결제하기 버튼 추가
+  displayCartItems();
+  addClearCartButton();
+  addCheckoutButton();
 });
 
-// 장바구니 비우기 버튼을 JavaScript로 생성
+// 장바구니 비우기 버튼
 function addClearCartButton() {
   const cartContainer = document.querySelector(".shopping_cart");
   let clearCartButton = document.querySelector(".clear-cart-btn");
 
-  // 버튼이 이미 존재하면 다시 만들지 않음
   if (!clearCartButton) {
     clearCartButton = document.createElement("button");
     clearCartButton.classList.add("clear-cart-btn");
     clearCartButton.textContent = "장바구니 비우기";
 
-    // .cart-buttons 컨테이너 안에 버튼을 추가합니다.
     const cartButtonsContainer = document.querySelector(".cart-buttons");
     if (cartButtonsContainer) {
       cartButtonsContainer.appendChild(clearCartButton);
@@ -24,51 +22,63 @@ function addClearCartButton() {
 
   // 버튼 이벤트
   clearCartButton.addEventListener("click", () => {
-    localStorage.removeItem("cartItems"); // 장바구니 비우기
-    displayCartItems(); // UI 업데이트
+    Swal.fire({
+      title: "정말 비우시겠습니까?",
+      text: "장바구니의 모든 상품이 삭제됩니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "네, 삭제합니다!",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("cartItems"); // 장바구니 비우기
+        displayCartItems(); // UI 업데이트
+        Swal.fire("삭제 완료!", "장바구니가 비워졌습니다.", "success");
+      }
+    });
   });
 
-  // 장바구니가 비어있지 않으면 보이게 함
   clearCartButton.style.display = localStorage.getItem("cartItems")
     ? "inline-block"
     : "none";
 }
 
-// 결제하기 버튼을 JavaScript로 생성
+// 결제하기 버튼
 function addCheckoutButton() {
   const cartContainer = document.querySelector(".shopping_cart");
   let checkoutButton = document.querySelector(".checkout-btn");
 
-  // 버튼이 이미 존재하면 다시 만들지 않음
   if (!checkoutButton) {
     checkoutButton = document.createElement("button");
     checkoutButton.classList.add("checkout-btn");
     checkoutButton.textContent = "결제하기";
 
-    // .cart-buttons 컨테이너 안에 버튼을 추가합니다.
     const cartButtonsContainer = document.querySelector(".cart-buttons");
     if (cartButtonsContainer) {
       cartButtonsContainer.appendChild(checkoutButton);
     }
   }
 
-  // 버튼 이벤트
   checkoutButton.addEventListener("click", () => {
-    alert("결제 준비중 입니다.");
+    Swal.fire({
+      title: "결제 준비중!",
+      text: "준비중입니다.",
+      icon: "info",
+      confirmButtonText: "확인",
+    });
   });
 
-  // 장바구니가 비어있지 않으면 보이게 함
   checkoutButton.style.display = localStorage.getItem("cartItems")
     ? "inline-block"
     : "none";
 }
 
-// 장바구니 항목 표시 함수
+// 장바구니 표시 함수
 function displayCartItems() {
   const cartContainer = document.querySelector(".shopping_cart");
   let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-  cartContainer.innerHTML = ""; // 기존 내용 초기화
+  cartContainer.innerHTML = "";
 
   if (cartItems.length === 0) {
     const emptyMessage = document.createElement("p");
@@ -97,7 +107,6 @@ function displayCartItems() {
     cartContainer.appendChild(itemDiv);
   });
 
-  // 버튼 상태 업데이트
   addClearCartButton();
   addCheckoutButton();
   addEventListeners();
@@ -105,7 +114,6 @@ function displayCartItems() {
 
 // 이벤트 리스너 추가
 function addEventListeners() {
-  // 수량 변경 이벤트
   document.querySelectorAll(".quantity-input").forEach((input) => {
     input.addEventListener("change", function () {
       let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
@@ -115,14 +123,30 @@ function addEventListeners() {
     });
   });
 
-  // 삭제 버튼 이벤트
   document.querySelectorAll(".remove-btn").forEach((button) => {
     button.addEventListener("click", function () {
       let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
       const index = this.dataset.index;
-      cartItems.splice(index, 1); // 해당 아이템 삭제
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      displayCartItems(); // UI 업데이트
+
+      Swal.fire({
+        title: "상품을 삭제할까요?",
+        text: `"${cartItems[index].name}"을(를) 장바구니에서 제거합니다.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "네, 삭제합니다",
+        cancelButtonText: "취소",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          cartItems.splice(index, 1);
+          localStorage.setItem("cartItems", JSON.stringify(cartItems));
+          displayCartItems();
+          Swal.fire(
+            "삭제 완료!",
+            "상품이 장바구니에서 제거되었습니다.",
+            "success"
+          );
+        }
+      });
     });
   });
 }

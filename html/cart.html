@@ -3,14 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>장바구니 페이지</title>
     <link rel="stylesheet" href="/css/cart.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <script src="/js/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-    <!-- 헤더 -->
-    <header class="header-gm"></header>
+    <!-- 헤더 (정적 HTML) -->
+    <header class="header-gm">
+      <div class="header-left">
+        <div class="logo">
+          <a href="/html/main.html">Sleek Lens</a>
+        </div>
+      </div>
+      <div class="header-right">
+        <!-- 찜한 상품 -->
+        <div class="wishlist">
+          <a href="/html/wishlist.html">
+            <i class="fas fa-heart"></i>
+            <span class="wishlist-count">0</span>
+          </a>
+        </div>
+        <!-- 로그인 -->
+        <div class="login">
+          <a href="#" id="login-link">로그인</a>
+        </div>
+        <!-- 장바구니 -->
+        <div class="cart">
+          <a href="/html/cart.html">
+            <img src="/img/shopping_bag.png" alt="Cart" />
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </header>
 
     <!-- 장바구니 물건 -->
     <div class="shopping_cart"></div>

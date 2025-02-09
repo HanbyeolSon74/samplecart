@@ -144,5 +144,12 @@ function addShoppingCart(product) {
 
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
   updateCartCount(); // 장바구니 숫자 업데이트
-  alert("상품이 장바구니에 추가되었습니다!");
+
+  // SweetAlert로 알림 표시
+  Swal.fire({
+    title: "장바구니에 추가됨!",
+    text: `"${product.name}"이(가) 장바구니에 추가되었습니다.`,
+    icon: "success",
+    confirmButtonText: "확인",
+  });
 }
