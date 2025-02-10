@@ -1,4 +1,4 @@
-# 🕶️ Custom E-Commerce (젠틀몬스터 스타일)
+# 🕶️ Custom E-Commerce 
 
 > **Minimal & Modern Online Store**  
 > 젠틀몬스터 스타일을 반영한 심플하고 세련된 UI의 E-Commerce 웹사이트입니다.
