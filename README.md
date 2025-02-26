@@ -28,26 +28,20 @@ Backend: Node.js, Express
 - 반응형 UI 최적화  
 
 ## 관리자 페이지 ##
-![Image](https://github.com/user-attachments/assets/b684983e-30e4-44f0-b858-bb6ef0a01c86)
+![Image](https://github.com/user-attachments/assets/b65024e9-a533-403e-b9f7-60e5cf1fb2e5)
 
 ## 메인 페이지 ##
-![Image](https://github.com/user-attachments/assets/63d44ad9-56b6-434c-95b3-906a806ebe3e)
+![Image](https://github.com/user-attachments/assets/0b450e33-1fc0-41b8-b4eb-5c617a1316e2)
 
 
-## 가게 페이지 ##
-![Image](https://github.com/user-attachments/assets/3260652d-71d8-47b8-9e09-b4637197639f)
+## 카테고리(안경) 페이지 ##
+![Image](https://github.com/user-attachments/assets/76a71459-beac-4035-9104-5e0f5cdf9c51)
 
-## 메뉴 페이지 ##
-![Image](https://github.com/user-attachments/assets/d04e0716-1c1a-445a-8e83-61d44efbc825)
+## 카테고리(선글라스) ##
+![Image](https://github.com/user-attachments/assets/be4a5315-970d-4d96-97cf-e52807df0fcc)
 
-## 카테고리 페이지(디저트) ##
-![Image](https://github.com/user-attachments/assets/eb8556fe-bae7-44e5-a8f4-8c33328ece5d)
-
-## 카테고리 페이지(음료) ##
-![Image](https://github.com/user-attachments/assets/09134cfe-7bb0-4773-8348-5ef976dcc7e2)
-
-## 카테고리 페이지(굿즈) ##
-![Image](https://github.com/user-attachments/assets/5e740dbf-188b-48b7-95a9-e2706383ed7e)
+## 장바구니 페이지 ##
+![Image](https://github.com/user-attachments/assets/15ddb112-995d-4295-b20e-2dddbf87277b)
 
 
 
